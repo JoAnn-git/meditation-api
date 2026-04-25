@@ -1,5 +1,13 @@
-let sessions = [];
-let currentId = 0;
+let sessions = [
+  {
+    id: 1,
+    duration: 20,
+    notes: "sample session",
+    date: new Date(),
+  },
+];
+let currentId = 2;
+
 exports.getSessions = (req, res) => {
   res.json(sessions);
 };
