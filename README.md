@@ -47,7 +47,7 @@ docker run -p 3000:3000 meditation-api
 
 ## API Endpoints
 
-````code
+```code
 // Return all sessions
 GET /sessions
 
@@ -55,12 +55,12 @@ GET /sessions
  POST /sessions
 
 Example:
-```JSON
+
 {
 "duration": 30,
 "notes": "morning meditation"
 }
-```
+
 
 //Get one session
 GET /sessions/:id
@@ -79,5 +79,3 @@ DELETE /sessions/:id
 ## About
 
 This project was built as part of my backend learning journey, focusing on API design, Docker, and deployment.
-```
-````
