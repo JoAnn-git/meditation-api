@@ -79,6 +79,7 @@ DELETE /sessions/:id
 - Add PostgreSQL database
 - Add authentication (JWT)
 - Add pagination
+- Add logging
 
 ## About
 
