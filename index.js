@@ -6,7 +6,7 @@ app.use(express.json());
 const sessionRoutes = require("./routes/sessionRoutes");
 app.use("/", sessionRoutes);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
