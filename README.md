@@ -60,7 +60,7 @@ Example:
 "duration": 30,
 "notes": "morning meditation"
 }
-````
+```
 
 //Get one session
 GET /sessions/:id
@@ -80,3 +80,4 @@ DELETE /sessions/:id
 
 This project was built as part of my backend learning journey, focusing on API design, Docker, and deployment.
 ```
+````
