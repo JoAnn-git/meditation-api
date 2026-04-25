@@ -12,11 +12,6 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.get("/", (req, res) => {
-  res.send(`
-    <h1>🧘 Meditation API</h1>
-    <p>Welcome! This is a backend API project.</p>
-  
-    <p>You will see more soon, Thank for my friends support(spiritual support)</p>
-  `);
-});
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "public")));
