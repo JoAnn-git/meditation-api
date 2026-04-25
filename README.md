@@ -40,32 +40,32 @@ npm run dev
 
 ## Run with Docker
 
+```bash
 docker build -t meditation-api .
 docker run -p 3000:3000 meditation-api
+```
 
 ## API Endpoints
 
-# GET /sessions
+```code
+// Return all sessions
+GET /sessions
 
-Return all sessions
-
-# POST /sessions
-
-Create a session
+// Create a session
+ POST /sessions
 
 Example:
 {
 "duration": 30,
 "notes": "morning meditation"
 }
+//Get one session
+GET /sessions/:id
 
-# GET /sessions/:id
 
-Get one session
-
-# DELETE /sessions/:id
-
-Delete session
+//Delete session
+DELETE /sessions/:id
+```
 
 ## Future Improvements
 
