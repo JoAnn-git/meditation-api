@@ -16,13 +16,13 @@ app.get("/", (req, res) => {
   res.send(`
     <h1>🧘 Meditation API</h1>
     <p>Welcome! This is a backend API project.</p>
-    <p>Available endpoints:</p>
-    <ul>
-      <li>GET /sessions</li>
-      <li>POST /sessions</li>
-      <li>GET /sessions/:id</li>
-      <li>DELETE /sessions/:id</li>
-    </ul>
-    <p>you will see more soon, thank for my friends support(spiritual support)</p>
+    // <p>Available endpoints:</p>
+    // <ul>
+    //   <li>GET /sessions</li>
+    //   <li>POST /sessions</li>
+    //   <li>GET /sessions/:id</li>
+    //   <li>DELETE /sessions/:id</li>
+    // </ul>
+    <p>You will see more soon, Thank for my friends support(spiritual support)</p>
   `);
 });
