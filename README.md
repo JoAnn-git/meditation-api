@@ -1,6 +1,6 @@
 # Meditation API
 
-A simple RESTful API for tracking meditation sessions.
+A RESTful API for tracking meditation sessions, built with Node.js and Express.
 
 ## Live Demo
 
@@ -13,6 +13,19 @@ https://meditation-api-xtf8.onrender.com/
 - Get session by ID
 - Delete session
 - Input validation
+
+## Example Usage
+
+### Create a session
+
+POST /sessions
+
+```json
+{
+  "duration": 30,
+  "notes": "morning meditation"
+}
+```
 
 ## Tech Stack
 
@@ -53,15 +66,6 @@ GET /sessions
 
 // Create a session
  POST /sessions
-
-Example:
-
-{
-"duration": 30,
-"notes": "morning meditation"
-}
-
-
 //Get one session
 GET /sessions/:id
 
