@@ -10,8 +10,8 @@ const {
   deleteSession,
 } = require("../controllers/sessionController");
 
+router.get("/sessions", authMiddleware, getSessions);
 router.post("/sessions", authMiddleware, createSession);
-router.get("/sessions", getSessions);
 
 router.get("/sessions/:id", getSessionById);
 router.delete("/sessions/:id", deleteSession);

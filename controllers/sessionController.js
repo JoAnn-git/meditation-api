@@ -1,20 +1,23 @@
 const pool = require("../config/db");
 
 exports.getSessions = async (req, res) => {
-  const result = await pool.query("SELECT * FROM sessions ORDER BY id ASC");
+  const userId = req.user.userId;
+
+  const result = await pool.query(
+    "SELECT * FROM sessions WHERE user_id = $1 ORDER BY id ASC",
+    [userId],
+  );
+
   res.json(result.rows);
 };
 
 exports.createSession = async (req, res) => {
   const { duration, notes } = req.body;
-
-  if (!duration || typeof duration !== "number") {
-    return res.status(400).json({ error: "Duration must be a number" });
-  }
+  const userId = req.user.userId;
 
   const result = await pool.query(
-    "INSERT INTO sessions (duration, notes) VALUES ($1, $2) RETURNING *",
-    [duration, notes],
+    "INSERT INTO sessions (duration, notes, user_id) VALUES ($1, $2, $3) RETURNING *",
+    [duration, notes, userId],
   );
 
   res.status(201).json(result.rows[0]);
