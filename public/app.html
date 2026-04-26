@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Meditation App</title>
+</head>
+<body>
+  <h1>🧘 Meditation App</h1>
+
+  <h2>Register</h2>
+  <input id="reg-username" placeholder="username">
+  <input id="reg-password" type="password" placeholder="password">
+  <button onclick="register()">Register</button>
+
+  <h2>Login</h2>
+  <input id="login-username" placeholder="username">
+  <input id="login-password" type="password" placeholder="password">
+  <button onclick="login()">Login</button>
+
+  <p id="token"></p>
+
+  <h2>Create Session</h2>
+  <input id="duration" placeholder="duration">
+  <input id="notes" placeholder="notes">
+  <button onclick="createSession()">Add Session</button>
+
+  <script>
+    let token = '';
+
+    const API = ''; // empty = same domain (works on Render)
+
+    async function register() {
+      const username = document.getElementById('reg-username').value;
+      const password = document.getElementById('reg-password').value;
+
+      const res = await fetch(API + '/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    }
+
+    async function login() {
+      const username = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
+
+      const res = await fetch(API + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+      token = data.token;
+
+      document.getElementById('token').innerText = 'Token: ' + token;
+    }
+
+    async function createSession() {
+      const duration = document.getElementById('duration').value;
+      const notes = document.getElementById('notes').value;
+
+      const res = await fetch(API + '/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ duration: Number(duration), notes })
+      });
+
+      const data = await res.json();
+      alert(JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>

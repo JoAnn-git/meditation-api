@@ -1,0 +1,8 @@
+POST http://localhost:3000/sessions
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc3NzE3OTAzMywiZXhwIjoxNzc3MTgyNjMzfQ.l1m79ZMu4Vgs3mFllvaLOk5qNIuGbx5WLI9KUiGgV54
+
+{
+  "duration": 60,
+  "notes": "1 hour meditation"
+}

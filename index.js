@@ -1,10 +1,15 @@
 const express = require("express");
 const app = express();
 
+require("dotenv").config();
+
 app.use(express.json());
 
 const sessionRoutes = require("./routes/sessionRoutes");
 app.use("/", sessionRoutes);
+
+const authRoutes = require("./routes/authRoutes");
+app.use("/", authRoutes);
 
 const PORT = process.env.PORT || 3000;
 

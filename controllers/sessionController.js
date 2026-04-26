@@ -1,70 +1,48 @@
-let sessions = [
-  {
-    id: 1,
-    duration: 20,
-    notes: "sample session",
-    date: new Date(),
-  },
-];
-let currentId = 2;
+const pool = require("../config/db");
 
-exports.getSessions = (req, res) => {
-  res.json(sessions);
+exports.getSessions = async (req, res) => {
+  const result = await pool.query("SELECT * FROM sessions ORDER BY id ASC");
+  res.json(result.rows);
 };
 
-exports.createSession = (req, res) => {
+exports.createSession = async (req, res) => {
   const { duration, notes } = req.body;
 
   if (!duration || typeof duration !== "number") {
-    return res.status(400).json({
-      error: "Duration must be a number",
-    });
+    return res.status(400).json({ error: "Duration must be a number" });
   }
 
-  if (duration <= 0) {
-    return res.status(400).json({
-      error: "Duration must be greater than 0",
-    });
-  }
+  const result = await pool.query(
+    "INSERT INTO sessions (duration, notes) VALUES ($1, $2) RETURNING *",
+    [duration, notes],
+  );
 
-  const newSession = {
-    id: currentId++,
-    duration,
-    notes: notes || "",
-    date: new Date(),
-  };
-
-  sessions.push(newSession);
-
-  res.status(201).json(newSession);
+  res.status(201).json(result.rows[0]);
 };
 
-exports.getSessionById = (req, res) => {
+exports.getSessionById = async (req, res) => {
   const id = parseInt(req.params.id);
 
-  const session = sessions.find((s) => s.id === id);
+  const result = await pool.query("SELECT * FROM sessions WHERE id = $1", [id]);
 
-  if (!session) {
-    return res.status(404).json({
-      error: "Session not found",
-    });
+  if (result.rows.length === 0) {
+    return res.status(404).json({ error: "Session not found" });
   }
 
-  res.json(session);
+  res.json(result.rows[0]);
 };
 
-exports.deleteSession = (req, res) => {
+exports.deleteSession = async (req, res) => {
   const id = parseInt(req.params.id);
 
-  const index = sessions.findIndex((s) => s.id === id);
+  const result = await pool.query(
+    "DELETE FROM sessions WHERE id = $1 RETURNING *",
+    [id],
+  );
 
-  if (index === -1) {
-    return res.status(404).json({
-      error: "Session not found",
-    });
+  if (result.rows.length === 0) {
+    return res.status(404).json({ error: "Session not found" });
   }
-
-  sessions.splice(index, 1);
 
   res.json({ message: "Session deleted" });
 };
