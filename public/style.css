@@ -90,3 +90,7 @@ li {
   font-style: italic;
   display: block;   /* forces new line */
 }
+.github-icon {
+  width: 20px;
+  height: 20px;
+}
