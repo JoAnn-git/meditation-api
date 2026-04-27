@@ -77,6 +77,12 @@
         alert("Please enter duration as a number");
         return;
       }
+      
+      const isConfirmed = confirm(`Have you finised sitting this session?\n\nDuration: ${duration} min\nNotes: ${notes}`);
+
+  if (!isConfirmed) {
+    return;
+  }
       try {
         const res = await fetch('/sessions', {
           method: 'POST',
