@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>🧘 My Sessions</h1>
+
+    <input id="duration" placeholder="Duration (minutes)">
+    <input id="notes" placeholder="Notes">
+    <button onclick="addSession()">Add Session</button>
+
+    <ul id="list"></ul>
+
+    <button onclick="logout()" style="background:#e53935;">
+      Logout
+    </button>
+  </div>
+
+  <script>
+  
+    const token = localStorage.getItem("token");
+
+
+    if (!token) {
+      window.location.href = "/login.html";
+    }
+
+  
+    async function loadSessions() {
+      try {
+        const res = await fetch('/sessions', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        const data = await res.json();
+
+        const list = document.getElementById('list');
+        list.innerHTML = '';
+
+   
+        if (data.length === 0) {
+          list.innerHTML = "<p>No sessions yet</p>";
+          return;
+        }
+
+        data.forEach(s => {
+          const li = document.createElement('li');
+
+          const date = new Date(s.date).toLocaleString();
+
+          li.innerText = `🕒 ${s.duration} min - ${s.notes} (${date})`;
+
+          list.appendChild(li);
+        });
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+   
+    async function addSession() {
+      const duration = document.getElementById('duration').value;
+      const notes = document.getElementById('notes').value;
+
+      if (!duration) {
+        alert("Please enter duration");
+        return;
+      }
+    if (!isValidNumber(duration)) {
+        alert("Please enter duration as a number");
+        return;
+      }
+      try {
+        const res = await fetch('/sessions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            duration: Number(duration),
+            notes
+          })
+        });
+
+        const data = await res.json();
+
+       
+        loadSessions();
+
+        //  Clear inputs
+        document.getElementById('duration').value = '';
+        document.getElementById('notes').value = '';
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function isValidNumber(value) {
+  if (value === null || value === undefined) return false;
+
+  const num = Number(value);
+
+  return Number.isFinite(num);
+}
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "/login.html";
+    }
+
+  
+    loadSessions();
+  </script>
+</body>
+</html>

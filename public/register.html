@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/style.css">
+
+
+<div class="container">
+  <h2>Register</h2>
+
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="register()">Register</button>
+ <p id="message" style="color:red; text-align:center;"></p>
+  <div class="link">
+    <a href="/login.html">Already have an account?</a>
+  </div>
+</div>
+<script>
+async function register() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+   const message = document.getElementById('message');
+      message.innerText = ''; // clear old message
+      try{
+  const res = await fetch('/register', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ username, password })
+  });
+
+  const data = await res.json();
+ if (!res.ok) {
+          message.innerText = data.error || "Register failed";
+          return;
+        }
+  alert("Registered sucessfully!");
+  window.location.href = "/login.html"; // 👉 go to login
+
+  } catch (err) {
+        message.innerText = "Server error";
+        console.error(err);
+      }
+}
+</script>

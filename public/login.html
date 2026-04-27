@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Login</h2>
+
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <p id="message" style="color:red; text-align:center;"></p>
+
+    <div class="link">
+      <a href="/register.html">Create account</a>
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const message = document.getElementById('message');
+
+      message.innerText = ''; // clear old message
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+      
+        if (!res.ok) {
+          message.innerText = data.error || "Login failed";
+          return;
+        }
+
+       
+        localStorage.setItem("token", data.token);
+
+        window.location.href = "/dashboard.html";
+
+      } catch (err) {
+        message.innerText = "Server error";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

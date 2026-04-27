@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
   ]);
 
   if (result.rows.length === 0) {
-    return res.status(400).json({ error: "Invalid credentials" });
+    return res.status(400).json({ error: "User not registered" });
   }
 
   const user = result.rows[0];
