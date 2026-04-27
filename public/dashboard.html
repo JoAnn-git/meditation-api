@@ -12,6 +12,11 @@
     <input id="duration" placeholder="Duration (minutes)">
     <input id="notes" placeholder="Notes">
     <button onclick="addSession()">Add Session</button>
+    <div id="confirmBox" style="display:none; background:white; padding:20px; border:1px solid #ccc;">
+    <p id="confirmText"></p>
+        <button onclick="confirmAdd()">Confirm</button>
+        <button onclick="closeConfirm()">Cancel</button>
+    </div>
 
     <ul id="list"></ul>
 
@@ -64,52 +69,53 @@
       }
     }
 
-   
-    async function addSession() {
-      const duration = document.getElementById('duration').value;
-      const notes = document.getElementById('notes').value;
+   let pendingData = null;
 
-      if (!duration) {
-        alert("Please enter duration");
-        return;
-      }
-    if (!isValidNumber(duration)) {
+function showConfirm(duration, notes) {
+  pendingData = { duration, notes };
+
+  document.getElementById('confirmText').innerText =
+    `Add ${duration} min session?`;
+
+  document.getElementById('confirmBox').style.display = 'block';
+}
+
+function closeConfirm() {
+  document.getElementById('confirmBox').style.display = 'none';
+}
+
+async function confirmAdd() {
+  const { duration, notes } = pendingData;
+
+  await fetch('/sessions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({ duration: Number(duration), notes })
+  });
+
+  closeConfirm();
+  loadSessions();
+}
+   function addSession() {
+  const duration = document.getElementById('duration').value;
+  const notes = document.getElementById('notes').value;
+
+  if (!duration) {
+    alert("Please enter duration");
+    return;
+  }
+  if (!isValidNumber(duration)) {
         alert("Please enter duration as a number");
         return;
       }
-      
-      const isConfirmed = confirm(`Have you finised sitting this session?\n\nDuration: ${duration} min\nNotes: ${notes}`);
-
-  if (!isConfirmed) {
-    return;
-  }
-      try {
-        const res = await fetch('/sessions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          },
-          body: JSON.stringify({
-            duration: Number(duration),
-            notes
-          })
-        });
-
-        const data = await res.json();
-
-       
-        loadSessions();
-
-        //  Clear inputs
-        document.getElementById('duration').value = '';
-        document.getElementById('notes').value = '';
-
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
+  // 👉 redirect to confirm page with data
+  const url = `/confirm.html?duration=${duration}&notes=${encodeURIComponent(notes)}`;
+  window.location.href = url;
+}
+    
     function isValidNumber(value) {
   if (value === null || value === undefined) return false;
 

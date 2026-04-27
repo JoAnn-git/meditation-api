@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Confirm Session</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Confirm Session</h2>
+    <p style=" color:rgba(37, 15, 240, 0.637);">If you finished this sitting, please confirm add the session</p>
+
+    <p id="details"></p>
+
+    <button onclick="confirmAdd()">Confirm</button>
+    <button onclick="cancel()" style="background:#ccc; color:black;">
+      Cancel
+    </button>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+
+    // 🔐 protect page
+    if (!token) {
+      window.location.href = "/login.html";
+    }
+
+
+    const params = new URLSearchParams(window.location.search);
+    const duration = params.get("duration");
+    const notes = params.get("notes");
+
+    // 🧾 show details
+    document.getElementById("details").innerText =
+      `Duration: ${duration} min\nNotes: ${notes}`;
+
+    async function confirmAdd() {
+      try {
+        await fetch('/sessions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            duration: Number(duration),
+            notes
+          })
+        });
+
+     
+        window.location.href = "/dashboard.html";
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function cancel() {
+      window.location.href = "/dashboard.html";
+    }
+  </script>
+</body>
+</html>
