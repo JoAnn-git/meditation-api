@@ -3,9 +3,16 @@ const pool = require("../config/db");
 exports.getSessions = async (req, res) => {
   const userId = req.user.userId;
 
+  const page = parseInt(req.query.page) || 1;
+  const limit = 5;
+  const offset = (page - 1) * limit;
+
   const result = await pool.query(
-    "SELECT * FROM sessions WHERE user_id = $1 ORDER BY id ASC",
-    [userId],
+    `SELECT * FROM sessions 
+     WHERE user_id = $1 
+     ORDER BY date DESC 
+     LIMIT $2 OFFSET $3`,
+    [userId, limit, offset],
   );
 
   res.json(result.rows);

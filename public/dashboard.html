@@ -12,11 +12,11 @@
     <input id="duration" placeholder="Duration (minutes)">
     <input id="notes" placeholder="Notes">
     <button onclick="addSession()">Add Session</button>
-    <div id="confirmBox" style="display:none; background:white; padding:20px; border:1px solid #ccc;">
-    <p id="confirmText"></p>
-        <button onclick="confirmAdd()">Confirm</button>
-        <button onclick="closeConfirm()">Cancel</button>
-    </div>
+  <div class="pagination">
+  <button onclick="prevPage()">Prev</button>
+  <span id="page-number">Page 1</span>
+  <button onclick="nextPage()">Next</button>
+</div>
 
     <ul id="list"></ul>
 
@@ -33,42 +33,46 @@
     if (!token) {
       window.location.href = "/login.html";
     }
-
-  
-    async function loadSessions() {
-      try {
-        const res = await fetch('/sessions', {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
-
-        const data = await res.json();
-
-        const list = document.getElementById('list');
-        list.innerHTML = '';
-
-   
-        if (data.length === 0) {
-          list.innerHTML = "<p>No sessions yet, please have a sit and add the session</p>";
-          return;
-        }
-
-        data.forEach(s => {
-          const li = document.createElement('li');
-
-          const date = new Date(s.date).toLocaleString();
-
-          li.innerText = `🕒 ${s.duration} min - ${s.notes} (${date})`;
-
-          list.appendChild(li);
-        });
-
-      } catch (err) {
-        console.error(err);
-      }
+let currentPage = 1;
+  async function loadSessions() {
+  const res = await fetch(`/sessions?page=${currentPage}`, {
+    headers: {
+      'Authorization': 'Bearer ' + token
     }
+  });
 
+  const data = await res.json();
+
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  if (data.length === 0) {
+    list.innerHTML = "<p>No sessions yet, please have a sit and add the session</p>";
+    return;
+  }
+
+  data.forEach(s => {
+    const li = document.createElement('li');
+    const date = new Date(s.date).toLocaleString();
+
+    li.innerText = `${s.duration} min - ${s.notes} (${date})`;
+    list.appendChild(li);
+  });
+
+  document.getElementById('page-number').innerText = `Page ${currentPage}`;
+}
+function nextPage() {
+  currentPage++;
+  loadSessions();
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    loadSessions();
+  }
+}
+   
    let pendingData = null;
 
 function showConfirm(duration, notes) {

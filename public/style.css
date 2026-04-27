@@ -68,3 +68,16 @@ li {
   margin-top: 8px;
   border: 1px solid #eee;
 }
+.pagination {
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  align-items: center;       /* align vertically */
+  gap: 10px;                 /* space between items */
+  margin-top: 20px;
+}
+
+.pagination button {
+  width: auto;
+  padding: 5px 10px;
+  margin: 5px;
+}
