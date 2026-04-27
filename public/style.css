@@ -81,3 +81,12 @@ li {
   padding: 5px 10px;
   margin: 5px;
 }
+.github-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.github-link a {
+  font-style: italic;
+  display: block;   /* forces new line */
+}
